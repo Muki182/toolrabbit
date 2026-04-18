@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>工具兔 - 免费在线工具箱</title>
+  <meta name="description" content="免费在线工具箱 - JSON格式化、密码生成、文本处理、Base64编解码、URL编解码、时间戳转换、颜色转换、二维码生成等20+工具，无需注册，打开即用">
+  <meta name="keywords" content="在线工具,JSON格式化,密码生成,Base64,URL编码,时间戳,颜色转换,二维码,免费工具">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #6c5ce7;
+      --primary-light: #a29bfe;
+      --bg: #0f0f23;
+      --bg2: #1a1a2e;
+      --bg3: #25253d;
+      --text: #e8e8e8;
+      --text2: #999;
+      --border: #333;
+      --success: #00b894;
+      --warning: #fdcb6e;
+      --danger: #ff7675;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); }
+    
+    /* Header */
+    .header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 16px 24px; position: sticky; top: 0; z-index: 100; }
+    .header-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 22px; font-weight: 700; color: #fff; text-decoration: none; }
+    .logo span { color: var(--primary-light); }
+    .nav { display: flex; gap: 8px; flex-wrap: wrap; }
+    .nav a { color: var(--text2); text-decoration: none; padding: 6px 12px; border-radius: 6px; font-size: 13px; transition: all .2s; }
+    .nav a:hover, .nav a.active { color: #fff; background: var(--bg3); }
+
+    /* Main */
+    .main { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    
+    /* Hero */
+    .hero { text-align: center; padding: 48px 0 32px; }
+    .hero h1 { font-size: 36px; margin-bottom: 12px; }
+    .hero h1 span { color: var(--primary-light); }
+    .hero p { color: var(--text2); font-size: 16px; max-width: 600px; margin: 0 auto; }
+    
+    /* Tool Grid */
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 32px; }
+    .tool-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 20px 16px; text-align: center; cursor: pointer; transition: all .2s; }
+    .tool-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(108,92,231,0.15); }
+    .tool-card .icon { font-size: 28px; margin-bottom: 8px; }
+    .tool-card .name { font-size: 14px; font-weight: 500; }
+    .tool-card .desc { font-size: 11px; color: var(--text2); margin-top: 4px; }
+
+    /* Tool Panel */
+    .tool-panel { display: none; background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 24px; }
+    .tool-panel.active { display: block; }
+    .tool-panel h2 { font-size: 20px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .tool-panel h2 .back { cursor: pointer; color: var(--text2); font-size: 14px; }
+    .tool-panel h2 .back:hover { color: var(--primary-light); }
+
+    /* Form elements */
+    textarea { width: 100%; min-height: 160px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-family: 'Consolas', monospace; font-size: 13px; resize: vertical; }
+    textarea:focus { outline: none; border-color: var(--primary); }
+    input[type="text"], input[type="number"], select { background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 14px; }
+    input:focus, select:focus { outline: none; border-color: var(--primary); }
+    
+    .btn { padding: 8px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px; font-weight: 500; transition: all .2s; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-light); }
+    .btn-secondary { background: var(--bg3); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--primary); }
+    
+    .btn-row { display: flex; gap: 8px; margin: 12px 0; flex-wrap: wrap; }
+    .result-box { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-family: 'Consolas', monospace; font-size: 13px; min-height: 80px; white-space: pre-wrap; word-break: break-all; margin-top: 12px; position: relative; }
+    .copy-btn { position: absolute; top: 8px; right: 8px; background: var(--bg3); color: var(--text2); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; font-size: 11px; cursor: pointer; }
+    .copy-btn:hover { color: #fff; border-color: var(--primary); }
+
+    .form-row { display: flex; gap: 12px; margin: 12px 0; align-items: center; flex-wrap: wrap; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-group label { font-size: 12px; color: var(--text2); }
+
+    /* Ad placeholder */
+    .ad-slot { background: var(--bg3); border: 1px dashed var(--border); border-radius: 8px; padding: 16px; text-align: center; color: var(--text2); font-size: 12px; margin: 16px 0; min-height: 90px; display: flex; align-items: center; justify-content: center; }
+
+    /* Toast */
+    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--success); color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 14px; opacity: 0; transition: opacity .3s; z-index: 999; }
+    .toast.show { opacity: 1; }
+
+    /* Footer */
+    .footer { text-align: center; padding: 32px 0; color: var(--text2); font-size: 12px; border-top: 1px solid var(--border); margin-top: 32px; }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 24px; }
+      .tools-grid { grid-template-columns: repeat(3, 1fr); }
+      .nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <a class="logo" href="#" onclick="showHome()">🔧 <span>工具兔</span></a>
+    <div class="nav" id="navBar"></div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="hero" id="heroSection">
+    <h1>免费在线<span>工具箱</span></h1>
+    <p>20+ 实用工具，无需注册，打开即用，纯浏览器端运行</p>
+  </div>
+
+  <div class="tools-grid" id="toolGrid"></div>
+
+  <!-- Ad Slot -->
+  <div class="ad-slot">📢 广告位招商 | 联系: toolrabbit@example.com</div>
+
+  <div id="toolPanels"></div>
+
+  <div class="footer">
+    <p>工具兔 ToolRabbit © 2026 | 纯前端工具，无需注册，数据不离开浏览器</p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============ 工具定义 ============
+const TOOLS = [
+  { id: 'json', icon: '📋', name: 'JSON格式化', desc: '格式化/压缩/验证', cat: '开发' },
+  { id: 'password', icon: '🔐', name: '密码生成器', desc: '强密码一键生成', cat: '安全' },
+  { id: 'base64', icon: '🔄', name: 'Base64编解码', desc: '文本↔Base64', cat: '编码' },
+  { id: 'url', icon: '🔗', name: 'URL编解码', desc: 'URL编码/解码', cat: '编码' },
+  { id: 'timestamp', icon: '⏰', name: '时间戳转换', desc: '时间戳↔日期', cat: '开发' },
+  { id: 'color', icon: '🎨', name: '颜色转换', desc: 'HEX/RGB/HSL', cat: '设计' },
+  { id: 'qrcode', icon: '📱', name: '二维码生成', desc: '文本→二维码', cat: '工具' },
+  { id: 'text-stats', icon: '📝', name: '文本统计', desc: '字数/行数/字符', cat: '文本' },
+  { id: 'text-case', icon: '🔤', name: '大小写转换', desc: '驼峰/蛇形/常量', cat: '文本' },
+  { id: 'text-diff', icon: '📊', name: '文本对比', desc: '找出两段文本差异', cat: '文本' },
+  { id: 'hash', icon: '🛡️', name: 'Hash计算', desc: 'MD5/SHA1/SHA256', cat: '安全' },
+  { id: 'uuid', icon: '🆔', name: 'UUID生成', desc: 'UUID v4一键生成', cat: '开发' },
+  { id: 'regex', icon: '🔍', name: '正则测试', desc: '正则表达式在线测试', cat: '开发' },
+  { id: 'jwt', icon: '🔑', name: 'JWT解析', desc: '解码JWT Token', cat: '开发' },
+  { id: 'ip', icon: '🌐', name: 'IP查询', desc: '查看你的公网IP', cat: '网络' },
+  { id: 'user-agent', icon: '💻', name: 'UA解析', desc: '浏览器信息解析', cat: '网络' },
+  { id: 'markdown', icon: '📖', name: 'Markdown预览', desc: '实时Markdown渲染', cat: '文本' },
+  { id: 'image-base64', icon: '🖼️', name: '图片Base64', desc: '图片↔Base64互转', cat: '编码' },
+  { id: 'number-base', icon: '🔢', name: '进制转换', desc: '二/八/十/十六', cat: '开发' },
+  { id: 'css-gradient', icon: '🌈', name: 'CSS渐变', desc: '可视化生成渐变', cat: '设计' },
+];
+
+// ============ 渲染工具网格 ============
+function renderGrid() {
+  const grid = document.getElementById('toolGrid');
+  grid.innerHTML = TOOLS.map(t => `
+    <div class="tool-card" onclick="openTool('${t.id}')">
+      <div class="icon">${t.icon}</div>
+      <div class="name">${t.name}</div>
+      <div class="desc">${t.desc}</div>
+    </div>
+  `).join('');
+  
+  const nav = document.getElementById('navBar');
+  const cats = [...new Set(TOOLS.map(t => t.cat))];
+  nav.innerHTML = cats.map(c => `<a href="#" onclick="filterCat('${c}')">${c}</a>`).join('') +
+    `<a href="#" onclick="filterCat('all')">全部</a>`;
+}
+
+let currentCat = 'all';
+function filterCat(cat) {
+  currentCat = cat;
+  const grid = document.getElementById('toolGrid');
+  const filtered = cat === 'all' ? TOOLS : TOOLS.filter(t => t.cat === cat);
+  grid.innerHTML = filtered.map(t => `
+    <div class="tool-card" onclick="openTool('${t.id}')">
+      <div class="icon">${t.icon}</div>
+      <div class="name">${t.name}</div>
+      <div class="desc">${t.desc}</div>
+    </div>
+  `).join('');
+}
+
+function showHome() {
+  document.getElementById('heroSection').style.display = '';
+  document.getElementById('toolGrid').style.display = '';
+  document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
+}
+
+function openTool(id) {
+  document.getElementById('heroSection').style.display = 'none';
+  document.getElementById('toolGrid').style.display = 'none';
+  document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
+  const panel = document.getElementById('panel-' + id);
+  if (panel) panel.classList.add('active');
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => toast('已复制到剪贴板'));
+}
+
+// ============ 生成工具面板 ============
+function renderPanels() {
+  const container = document.getElementById('toolPanels');
+  let html = '';
+  
+  // JSON格式化
+  html += `<div class="tool-panel" id="panel-json">
+    <h2>📋 JSON格式化 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <textarea id="json-input" placeholder='粘贴JSON，例如: {"name":"hello","age":25}'></textarea>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="jsonFormat()">格式化</button>
+      <button class="btn btn-secondary" onclick="jsonMinify()">压缩</button>
+      <button class="btn btn-secondary" onclick="jsonValidate()">验证</button>
+      <button class="btn btn-secondary" onclick="jsonToCSV()">转CSV</button>
+    </div>
+    <div class="result-box" id="json-result">结果将显示在这里<button class="copy-btn" onclick="copyResult('json-result')">复制</button></div>
+  </div>`;
+
+  // 密码生成器
+  html += `<div class="tool-panel" id="panel-password">
+    <h2>🔐 密码生成器 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <div class="form-row">
+      <div class="form-group"><label>长度</label><input type="number" id="pwd-len" value="16" min="4" max="128"></div>
+      <div class="form-group"><label>大写</label><input type="checkbox" id="pwd-upper" checked></div>
+      <div class="form-group"><label>小写</label><input type="checkbox" id="pwd-lower" checked></div>
+      <div class="form-group"><label>数字</label><input type="checkbox" id="pwd-num" checked></div>
+      <div class="form-group"><label>符号</label><input type="checkbox" id="pwd-sym" checked></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="genPassword()">生成密码</button>
+      <button class="btn btn-secondary" onclick="genMultiPasswords()">生成10个</button>
+    </div>
+    <div class="result-box" id="pwd-result">点击生成按钮<button class="copy-btn" onclick="copyResult('pwd-result')">复制</button></div>
+  </div>`;
+
+  // Base64
+  html += `<div class="tool-panel" id="panel-base64">
+    <h2>🔄 Base64编解码 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <textarea id="b64-input" placeholder="输入文本或Base64字符串"></textarea>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="b64Encode()">编码 →</button>
+      <button class="btn btn-secondary" onclick="b64Decode()">← 解码</button>
+    </div>
+    <div class="result-box" id="b64-result">结果将显示在这里<button class="copy-btn" onclick="copyResult('b64-result')">复制</button></div>
+  </div>`;
+
+  // URL编解码
+  html += `<div class="tool-panel" id="panel-url">
+    <h2>🔗 URL编解码 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <textarea id="url-input" placeholder="输入URL或已编码的字符串"></textarea>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="urlEncode()">编码 →</button>
+      <button class="btn btn-secondary" onclick="urlDecode()">← 解码</button>
+    </div>
+    <div class="result-box" id="url-result">结果将显示在这里<button class="copy-btn" onclick="copyResult('url-result')">复制</button></div>
+  </div>`;
+
+  // 时间戳
+  html += `<div class="tool-panel" id="panel-timestamp">
+    <h2>⏰ 时间戳转换 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <div class="form-row">
+      <div class="form-group"><label>时间戳(秒)</label><input type="text" id="ts-input" placeholder="如 1713369600"></div>
+      <div class="form-group"><label>日期</label><input type="text" id="ts-date" placeholder="如 2024-04-17 20:00:00"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="tsToDate()">时间戳→日期</button>
+      <button class="btn btn-secondary" onclick="dateToTs()">日期→时间戳</button>
+      <button class="btn btn-secondary" onclick="currentTs()">当前时间戳</button>
+    </div>
+    <div class="result-box" id="ts-result"><button class="copy-btn" onclick="copyResult('ts-result')">复制</button></div>
+  </div>`;
+
+  // 颜色转换
+  html += `<div class="tool-panel" id="panel-color">
+    <h2>🎨 颜色转换 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <div class="form-row">
+      <div class="form-group"><label>选择颜色</label><input type="color" id="color-picker" value="#6c5ce7" onchange="colorConvert()"></div>
+      <div class="form-group"><label>HEX</label><input type="text" id="color-hex" placeholder="#6c5ce7" onchange="colorFromHex()"></div>
+      <div class="form-group"><label>RGB</label><input type="text" id="color-rgb" placeholder="108,92,231"></div>
+      <div class="form-group"><label>HSL</label><input type="text" id="color-hsl" placeholder=""></div>
+    </div>
+    <div id="color-preview" style="width:100%;height:60px;border-radius:8px;background:#6c5ce7;margin-top:12px;border:1px solid var(--border)"></div>
+  </div>`;
+
+  // 二维码
+  html += `<div class="tool-panel" id="panel-qrcode">
+    <h2>📱 二维码生成 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <textarea id="qr-input" placeholder="输入文本或URL" style="min-height:80px"></textarea>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="genQR()">生成二维码</button>
+    </div>
+    <div style="text-align:center;margin-top:16px"><canvas id="qr-canvas" style="display:none"></canvas></div>
+    <div id="qr-placeholder" style="text-align:center;color:var(--text2);padding:24px">二维码将显示在这里</div>
+  </div>`;
+
+  // 文本统计
+  html += `<div class="tool-panel" id="panel-text-stats">
+    <h2>📝 文本统计 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <textarea id="ts-text-input" placeholder="粘贴文本到这里，实时统计"></textarea>
+    <div class="result-box" id="ts-text-result">字符数: 0 | 字数: 0 | 行数: 0 | 段落数: 0 | 中文字符: 0 | 英文单词: 0</div>
+  </div>`;
+
+  // Hash计算
+  html += `<div class="tool-panel" id="panel-hash">
+    <h2>🛡️ Hash计算 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <textarea id="hash-input" placeholder="输入要计算Hash的文本"></textarea>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="calcHash('SHA-256')">SHA-256</button>
+      <button class="btn btn-secondary" onclick="calcHash('SHA-1')">SHA-1</button>
+      <button class="btn btn-secondary" onclick="calcHash('SHA-384')">SHA-384</button>
+      <button class="btn btn-secondary" onclick="calcHash('SHA-512')">SHA-512</button>
+    </div>
+    <div class="result-box" id="hash-result"><button class="copy-btn" onclick="copyResult('hash-result')">复制</button></div>
+  </div>`;
+
+  // UUID生成
+  html += `<div class="tool-panel" id="panel-uuid">
+    <h2>🆔 UUID生成 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="genUUID()">生成1个</button>
+      <button class="btn btn-secondary" onclick="genMultiUUID()">生成10个</button>
+    </div>
+    <div class="result-box" id="uuid-result"><button class="copy-btn" onclick="copyResult('uuid-result')">复制</button></div>
+  </div>`;
+
+  // 大小写转换
+  html += `<div class="tool-panel" id="panel-text-case">
+    <h2>🔤 大小写转换 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <textarea id="case-input" placeholder="输入文本，如 hello world"></textarea>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="convertCase('upper')">全大写</button>
+      <button class="btn btn-secondary" onclick="convertCase('lower')">全小写</button>
+      <button class="btn btn-secondary" onclick="convertCase('camel')">驼峰</button>
+      <button class="btn btn-secondary" onclick="convertCase('snake')">蛇形</button>
+      <button class="btn btn-secondary" onclick="convertCase('kebab')">短横线</button>
+      <button class="btn btn-secondary" onclick="convertCase('const')">常量</button>
+      <button class="btn btn-secondary" onclick="convertCase('title')">标题</button>
+    </div>
+    <div class="result-box" id="case-result"><button class="copy-btn" onclick="copyResult('case-result')">复制</button></div>
+  </div>`;
+
+  // 文本对比
+  html += `<div class="tool-panel" id="panel-text-diff">
+    <h2>📊 文本对比 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <textarea id="diff-input1" placeholder="文本1" style="min-height:200px"></textarea>
+      <textarea id="diff-input2" placeholder="文本2" style="min-height:200px"></textarea>
+    </div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="textDiff()">对比</button></div>
+    <div class="result-box" id="diff-result"></div>
+  </div>`;
+
+  // JWT解析
+  html += `<div class="tool-panel" id="panel-jwt">
+    <h2>🔑 JWT解析 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <textarea id="jwt-input" placeholder="粘贴JWT Token"></textarea>
+    <div class="btn-row"><button class="btn btn-primary" onclick="parseJWT()">解析</button></div>
+    <div class="result-box" id="jwt-result"><button class="copy-btn" onclick="copyResult('jwt-result')">复制</button></div>
+  </div>`;
+
+  // IP查询
+  html += `<div class="tool-panel" id="panel-ip">
+    <h2>🌐 IP查询 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <div class="btn-row"><button class="btn btn-primary" onclick="queryIP()">查询我的IP</button></div>
+    <div class="result-box" id="ip-result"><button class="copy-btn" onclick="copyResult('ip-result')">复制</button></div>
+  </div>`;
+
+  // UA解析
+  html += `<div class="tool-panel" id="panel-user-agent">
+    <h2>💻 UA解析 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <div class="result-box" id="ua-result"></div>
+  </div>`;
+
+  // Markdown预览
+  html += `<div class="tool-panel" id="panel-markdown">
+    <h2>📖 Markdown预览 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <textarea id="md-input" placeholder="# Hello\n\nWrite **markdown** here" oninput="renderMD()"></textarea>
+      <div id="md-preview" style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;overflow:auto;max-height:400px"></div>
+    </div>
+  </div>`;
+
+  // 图片Base64
+  html += `<div class="tool-panel" id="panel-image-base64">
+    <h2>🖼️ 图片Base64 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <input type="file" id="img-file" accept="image/*" onchange="imgToBase64()">
+    <div class="result-box" id="img-result" style="max-height:200px;overflow:auto"><button class="copy-btn" onclick="copyResult('img-result')">复制</button></div>
+  </div>`;
+
+  // 进制转换
+  html += `<div class="tool-panel" id="panel-number-base">
+    <h2>🔢 进制转换 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <div class="form-row">
+      <div class="form-group"><label>输入值</label><input type="text" id="nb-input" placeholder="255"></div>
+      <div class="form-group"><label>源进制</label><select id="nb-from"><option value="10">十进制</option><option value="2">二进制</option><option value="8">八进制</option><option value="16">十六进制</option></select></div>
+      <button class="btn btn-primary" onclick="convertBase()">转换</button>
+    </div>
+    <div class="result-box" id="nb-result"><button class="copy-btn" onclick="copyResult('nb-result')">复制</button></div>
+  </div>`;
+
+  // CSS渐变
+  html += `<div class="tool-panel" id="panel-css-gradient">
+    <h2>🌈 CSS渐变生成 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <div class="form-row">
+      <div class="form-group"><label>颜色1</label><input type="color" id="grad-c1" value="#6c5ce7" onchange="updateGradient()"></div>
+      <div class="form-group"><label>颜色2</label><input type="color" id="grad-c2" value="#a29bfe" onchange="updateGradient()"></div>
+      <div class="form-group"><label>方向</label><select id="grad-dir" onchange="updateGradient()">
+        <option value="to right">→ 水平</option><option value="to bottom">↓ 垂直</option>
+        <option value="to bottom right">↘ 对角</option><option value="135deg">135°</option>
+      </select></div>
+    </div>
+    <div id="grad-preview" style="width:100%;height:120px;border-radius:8px;background:linear-gradient(to right,#6c5ce7,#a29bfe);margin:12px 0;border:1px solid var(--border)"></div>
+    <div class="result-box" id="grad-result">background: linear-gradient(to right, #6c5ce7, #a29bfe);<button class="copy-btn" onclick="copyResult('grad-result')">复制</button></div>
+  </div>`;
+
+  // 正则测试
+  html += `<div class="tool-panel" id="panel-regex">
+    <h2>🔍 正则测试 <span class="back" onclick="showHome()">← 返回</span></h2>
+    <div class="form-row">
+      <div class="form-group" style="flex:1"><label>正则表达式</label><input type="text" id="regex-pattern" placeholder="\\d+" oninput="testRegex()"></div>
+      <div class="form-group"><label>标志</label><input type="text" id="regex-flags" value="g" style="width:60px" oninput="testRegex()"></div>
+    </div>
+    <textarea id="regex-text" placeholder="测试文本" oninput="testRegex()"></textarea>
+    <div class="result-box" id="regex-result">匹配结果将显示在这里</div>
+  </div>`;
+
+  container.innerHTML = html;
+}
+
+// ============ 工具函数实现 ============
+
+function copyResult(id) {
+  const el = document.getElementById(id);
+  const text = el.textContent.replace('复制', '').trim();
+  copyText(text);
+}
+
+// JSON
+function jsonFormat() {
+  try { const r = JSON.stringify(JSON.parse(document.getElementById('json-input').value), null, 2); document.getElementById('json-result').textContent = r; }
+  catch(e) { document.getElementById('json-result').textContent = '❌ 无效JSON: ' + e.message; }
+}
+function jsonMinify() {
+  try { const r = JSON.stringify(JSON.parse(document.getElementById('json-input').value)); document.getElementById('json-result').textContent = r; }
+  catch(e) { document.getElementById('json-result').textContent = '❌ 无效JSON: ' + e.message; }
+}
+function jsonValidate() {
+  try { JSON.parse(document.getElementById('json-input').value); document.getElementById('json-result').textContent = '✅ 有效的JSON'; }
+  catch(e) { document.getElementById('json-result').textContent = '❌ 无效JSON: ' + e.message; }
+}
+function jsonToCSV() {
+  try {
+    const data = JSON.parse(document.getElementById('json-input').value);
+    const arr = Array.isArray(data) ? data : [data];
+    if (!arr.length) throw new Error('空数组');
+    const headers = Object.keys(arr[0]);
+    const csv = [headers.join(','), ...arr.map(row => headers.map(h => JSON.stringify(row[h] ?? '')).join(','))].join('\n');
+    document.getElementById('json-result').textContent = csv;
+  } catch(e) { document.getElementById('json-result').textContent = '❌ ' + e.message; }
+}
+
+// 密码
+function genPassword() {
+  const len = parseInt(document.getElementById('pwd-len').value) || 16;
+  let chars = '';
+  if (document.getElementById('pwd-upper').checked) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  if (document.getElementById('pwd-lower').checked) chars += 'abcdefghijklmnopqrstuvwxyz';
+  if (document.getElementById('pwd-num').checked) chars += '0123456789';
+  if (document.getElementById('pwd-sym').checked) chars += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+  if (!chars) chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  const arr = new Uint32Array(len);
+  crypto.getRandomValues(arr);
+  const pwd = Array.from(arr, x => chars[x % chars.length]).join('');
+  const strength = len >= 16 && [document.getElementById('pwd-upper').checked, document.getElementById('pwd-lower').checked, document.getElementById('pwd-num').checked, document.getElementById('pwd-sym').checked].filter(Boolean).length >= 3 ? '强' : len >= 12 ? '中' : '弱';
+  document.getElementById('pwd-result').textContent = `${pwd}\n\n强度: ${strength} | 长度: ${len}`;
+}
+function genMultiPasswords() {
+  const len = parseInt(document.getElementById('pwd-len').value) || 16;
+  let chars = '';
+  if (document.getElementById('pwd-upper').checked) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  if (document.getElementById('pwd-lower').checked) chars += 'abcdefghijklmnopqrstuvwxyz';
+  if (document.getElementById('pwd-num').checked) chars += '0123456789';
+  if (document.getElementById('pwd-sym').checked) chars += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+  if (!chars) chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  const pwds = [];
+  for (let i = 0; i < 10; i++) {
+    const arr = new Uint32Array(len); crypto.getRandomValues(arr);
+    pwds.push(Array.from(arr, x => chars[x % chars.length]).join(''));
+  }
+  document.getElementById('pwd-result').textContent = pwds.join('\n');
+}
+
+// Base64
+function b64Encode() {
+  try { document.getElementById('b64-result').textContent = btoa(unescape(encodeURIComponent(document.getElementById('b64-input').value))); }
+  catch(e) { document.getElementById('b64-result').textContent = '❌ ' + e.message; }
+}
+function b64Decode() {
+  try { document.getElementById('b64-result').textContent = decodeURIComponent(escape(atob(document.getElementById('b64-input').value))); }
+  catch(e) { document.getElementById('b64-result').textContent = '❌ 无效Base64: ' + e.message; }
+}
+
+// URL
+function urlEncode() { document.getElementById('url-result').textContent = encodeURIComponent(document.getElementById('url-input').value); }
+function urlDecode() { try { document.getElementById('url-result').textContent = decodeURIComponent(document.getElementById('url-input').value); } catch(e) { document.getElementById('url-result').textContent = '❌ ' + e.message; } }
+
+// 时间戳
+function tsToDate() {
+  let ts = parseInt(document.getElementById('ts-input').value);
+  if (isNaN(ts)) return document.getElementById('ts-result').textContent = '❌ 请输入有效时间戳';
+  if (ts > 1e12) ts = ts / 1000; // ms → s
+  document.getElementById('ts-result').textContent = new Date(ts * 1000).toLocaleString('zh-CN', {timeZone:'Asia/Shanghai',hour12:false});
+}
+function dateToTs() {
+  const d = new Date(document.getElementById('ts-date').value);
+  if (isNaN(d)) return document.getElementById('ts-result').textContent = '❌ 请输入有效日期';
+  document.getElementById('ts-result').textContent = `秒: ${Math.floor(d/1000)}\n毫秒: ${d.getTime()}`;
+}
+function currentTs() {
+  const now = Date.now();
+  document.getElementById('ts-result').textContent = `秒: ${Math.floor(now/1000)}\n毫秒: ${now}\n日期: ${new Date().toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false})}`;
+}
+
+// 颜色
+function colorConvert() {
+  const hex = document.getElementById('color-picker').value;
+  document.getElementById('color-hex').value = hex;
+  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  document.getElementById('color-rgb').value = `${r}, ${g}, ${b}`;
+  const [h,s,l] = rgbToHsl(r,g,b);
+  document.getElementById('color-hsl').value = `${h}°, ${s}%, ${l}%`;
+  document.getElementById('color-preview').style.background = hex;
+}
+function colorFromHex() {
+  const hex = document.getElementById('color-hex').value;
+  document.getElementById('color-picker').value = hex;
+  colorConvert();
+}
+function rgbToHsl(r,g,b) {
+  r/=255;g/=255;b/=255; const max=Math.max(r,g,b),min=Math.min(r,g,b),l=(max+min)/2;
+  if(max===min) return [0,0,Math.round(l*100)];
+  const d=max-min, s=l>.5?d/(2-max-min):d/(max+min);
+  let h; if(max===r) h=((g-b)/d+(g<b?6:0))/6; else if(max===g) h=((b-r)/d+2)/6; else h=((r-g)/d+4)/6;
+  return [Math.round(h*360), Math.round(s*100), Math.round(l*100)];
+}
+
+// 二维码 (简单实现)
+function genQR() {
+  const text = document.getElementById('qr-input').value;
+  if (!text) return;
+  // 使用QR Server API生成二维码（免费，无需Key）
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    const canvas = document.getElementById('qr-canvas');
+    canvas.width = img.width; canvas.height = img.height;
+    canvas.getContext('2d').drawImage(img, 0, 0);
+    canvas.style.display = 'inline';
+    document.getElementById('qr-placeholder').style.display = 'none';
+  };
+  img.onerror = () => { document.getElementById('qr-placeholder').textContent = '生成失败，请重试'; };
+  img.src = `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(text)}`;
+  document.getElementById('qr-placeholder').textContent = '生成中...';
+}
+
+// 文本统计 (实时)
+document.addEventListener('input', e => {
+  if (e.target.id === 'ts-text-input') {
+    const t = e.target.value;
+    const chars = t.length;
+    const charsNoSpace = t.replace(/\s/g, '').length;
+    const words = t.trim().split(/\s+/).filter(Boolean).length;
+    const lines = t.split('\n').length;
+    const paragraphs = t.split(/\n\s*\n/).filter(p => p.trim()).length;
+    const cnChars = (t.match(/[\u4e00-\u9fff]/g) || []).length;
+    const enWords = (t.match(/[a-zA-Z]+/g) || []).length;
+    document.getElementById('ts-text-result').textContent = `字符: ${chars} | 无空格: ${charsNoSpace} | 行: ${lines} | 段: ${paragraphs} | 中文: ${cnChars} | 英文词: ${enWords} | 总词数: ${words}`;
+  }
+});
+
+// Hash
+async function calcHash(algo) {
+  const text = document.getElementById('hash-input').value;
+  const buf = await crypto.subtle.digest(algo, new TextEncoder().encode(text));
+  const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  document.getElementById('hash-result').textContent = `${algo}: ${hex}`;
+}
+
+// UUID
+function genUUID() {
+  document.getElementById('uuid-result').textContent = crypto.randomUUID();
+}
+function genMultiUUID() {
+  document.getElementById('uuid-result').textContent = Array.from({length:10}, () => crypto.randomUUID()).join('\n');
+}
+
+// 大小写
+function convertCase(type) {
+  const t = document.getElementById('case-input').value;
+  const words = t.split(/[\s_-]+/).filter(Boolean);
+  let r;
+  switch(type) {
+    case 'upper': r = t.toUpperCase(); break;
+    case 'lower': r = t.toLowerCase(); break;
+    case 'camel': r = words.map((w,i) => i ? w[0].toUpperCase() + w.slice(1).toLowerCase() : w.toLowerCase()).join(''); break;
+    case 'snake': r = words.map(w => w.toLowerCase()).join('_'); break;
+    case 'kebab': r = words.map(w => w.toLowerCase()).join('-'); break;
+    case 'const': r = words.map(w => w.toUpperCase()).join('_'); break;
+    case 'title': r = words.map(w => w[0].toUpperCase() + w.slice(1).toLowerCase()).join(' '); break;
+    default: r = t;
+  }
+  document.getElementById('case-result').textContent = r;
+}
+
+// 文本对比
+function textDiff() {
+  const a = document.getElementById('diff-input1').value.split('\n');
+  const b = document.getElementById('diff-input2').value.split('\n');
+  const maxLen = Math.max(a.length, b.length);
+  let html = '';
+  for (let i = 0; i < maxLen; i++) {
+    const la = a[i] ?? '', lb = b[i] ?? '';
+    if (la === lb) { html += `<div style="color:var(--text2)">${la}</div>`; }
+    else {
+      if (la) html += `<div style="color:var(--danger);background:rgba(255,107,107,0.1);padding:2px 4px;border-radius:3px">- ${la}</div>`;
+      if (lb) html += `<div style="color:var(--success);background:rgba(0,184,148,0.1);padding:2px 4px;border-radius:3px">+ ${lb}</div>`;
+    }
+  }
+  document.getElementById('diff-result').innerHTML = html;
+}
+
+// JWT
+function parseJWT() {
+  try {
+    const token = document.getElementById('jwt-input').value.trim();
+    const parts = token.split('.');
+    if (parts.length !== 3) throw new Error('无效JWT格式');
+    const header = JSON.parse(atob(parts[0].replace(/-/g,'+').replace(/_/g,'/')));
+    const payload = JSON.parse(atob(parts[1].replace(/-/g,'+').replace(/_/g,'/')));
+    let result = `Header:\n${JSON.stringify(header, null, 2)}\n\nPayload:\n${JSON.stringify(payload, null, 2)}`;
+    if (payload.exp) result += `\n\n过期时间: ${new Date(payload.exp * 1000).toLocaleString('zh-CN')}`;
+    if (payload.iat) result += `\n签发时间: ${new Date(payload.iat * 1000).toLocaleString('zh-CN')}`;
+    document.getElementById('jwt-result').textContent = result;
+  } catch(e) { document.getElementById('jwt-result').textContent = '❌ ' + e.message; }
+}
+
+// IP
+async function queryIP() {
+  try {
+    const res = await fetch('https://api.ipify.org?format=json');
+    const data = await res.json();
+    document.getElementById('ip-result').textContent = `IP: ${data.ip}\n时间: ${new Date().toLocaleString('zh-CN')}`;
+  } catch(e) { document.getElementById('ip-result').textContent = '❌ 查询失败: ' + e.message; }
+}
+
+// UA
+function parseUA() {
+  const ua = navigator.userAgent;
+  document.getElementById('ua-result').textContent = `User-Agent:\n${ua}\n\n平台: ${navigator.platform}\n语言: ${navigator.language}\n核心数: ${navigator.hardwareConcurrency}\n屏幕: ${screen.width}x${screen.height}\n设备内存: ${navigator.deviceMemory || '未知'}GB`;
+}
+
+// Markdown (简单实现)
+function renderMD() {
+  const md = document.getElementById('md-input').value;
+  let html = md
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/`(.+?)`/g, '<code style="background:var(--bg3);padding:2px 4px;border-radius:3px">$1</code>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/\n/g, '<br>');
+  document.getElementById('md-preview').innerHTML = html;
+}
+
+// 图片Base64
+function imgToBase64() {
+  const file = document.getElementById('img-file').files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => { document.getElementById('img-result').textContent = reader.result; };
+  reader.readAsDataURL(file);
+}
+
+// 进制转换
+function convertBase() {
+  const input = document.getElementById('nb-input').value.trim();
+  const from = parseInt(document.getElementById('nb-from').value);
+  try {
+    const num = parseInt(input, from);
+    if (isNaN(num)) throw new Error('无效输入');
+    document.getElementById('nb-result').textContent = `二进制: ${num.toString(2)}\n八进制: ${num.toString(8)}\n十进制: ${num.toString(10)}\n十六进制: ${num.toString(16).toUpperCase()}`;
+  } catch(e) { document.getElementById('nb-result').textContent = '❌ ' + e.message; }
+}
+
+// CSS渐变
+function updateGradient() {
+  const c1 = document.getElementById('grad-c1').value;
+  const c2 = document.getElementById('grad-c2').value;
+  const dir = document.getElementById('grad-dir').value;
+  const css = `background: linear-gradient(${dir}, ${c1}, ${c2});`;
+  document.getElementById('grad-preview').style.background = `linear-gradient(${dir}, ${c1}, ${c2})`;
+  document.getElementById('grad-result').textContent = css;
+}
+
+// 正则
+function testRegex() {
+  const pattern = document.getElementById('regex-pattern').value;
+  const flags = document.getElementById('regex-flags').value;
+  const text = document.getElementById('regex-text').value;
+  if (!pattern || !text) { document.getElementById('regex-result').innerHTML = ''; return; }
+  try {
+    const re = new RegExp(pattern, flags);
+    const matches = text.match(re);
+    if (matches) {
+      document.getElementById('regex-result').innerHTML = `<strong>匹配 ${matches.length} 个:</strong><br>` + matches.map(m => `<span style="background:rgba(108,92,231,0.3);padding:2px 4px;border-radius:3px">${m}</span>`).join(' ');
+    } else {
+      document.getElementById('regex-result').innerHTML = '<span style="color:var(--text2)">无匹配</span>';
+    }
+  } catch(e) {
+    document.getElementById('regex-result').innerHTML = `<span style="color:var(--danger)">❌ ${e.message}</span>`;
+  }
+}
+
+// ============ 初始化 ============
+renderGrid();
+renderPanels();
+parseUA();
+</script>
+
+</body>
+</html>
