@@ -219,7 +219,7 @@ function renderPanels() {
       <button class="btn btn-secondary" onclick="jsonValidate()">验证</button>
       <button class="btn btn-secondary" onclick="jsonToCSV()">转CSV</button>
     </div>
-    <div class="result-box" id="json-result">结果将显示在这里<button class="copy-btn" onclick="copyResult('json-result')">复制</button></div>
+    <div class="result-box" id="json-result"><span class="result-text">结果将显示在这里</span><button class="copy-btn" onclick="copyResult('json-result')">复制</button></div>
   </div>`;
 
   // 密码生成器
@@ -236,7 +236,7 @@ function renderPanels() {
       <button class="btn btn-primary" onclick="genPassword()">生成密码</button>
       <button class="btn btn-secondary" onclick="genMultiPasswords()">生成10个</button>
     </div>
-    <div class="result-box" id="pwd-result">点击生成按钮<button class="copy-btn" onclick="copyResult('pwd-result')">复制</button></div>
+    <div class="result-box" id="pwd-result"><span class="result-text">点击生成按钮</span><button class="copy-btn" onclick="copyResult('pwd-result')">复制</button></div>
   </div>`;
 
   // Base64
@@ -247,7 +247,7 @@ function renderPanels() {
       <button class="btn btn-primary" onclick="b64Encode()">编码 →</button>
       <button class="btn btn-secondary" onclick="b64Decode()">← 解码</button>
     </div>
-    <div class="result-box" id="b64-result">结果将显示在这里<button class="copy-btn" onclick="copyResult('b64-result')">复制</button></div>
+    <div class="result-box" id="b64-result"><span class="result-text">结果将显示在这里</span><button class="copy-btn" onclick="copyResult('b64-result')">复制</button></div>
   </div>`;
 
   // URL编解码
@@ -258,7 +258,7 @@ function renderPanels() {
       <button class="btn btn-primary" onclick="urlEncode()">编码 →</button>
       <button class="btn btn-secondary" onclick="urlDecode()">← 解码</button>
     </div>
-    <div class="result-box" id="url-result">结果将显示在这里<button class="copy-btn" onclick="copyResult('url-result')">复制</button></div>
+    <div class="result-box" id="url-result"><span class="result-text">结果将显示在这里</span><button class="copy-btn" onclick="copyResult('url-result')">复制</button></div>
   </div>`;
 
   // 时间戳
@@ -273,7 +273,7 @@ function renderPanels() {
       <button class="btn btn-secondary" onclick="dateToTs()">日期→时间戳</button>
       <button class="btn btn-secondary" onclick="currentTs()">当前时间戳</button>
     </div>
-    <div class="result-box" id="ts-result"><button class="copy-btn" onclick="copyResult('ts-result')">复制</button></div>
+    <div class="result-box" id="ts-result"><span class="result-text"></span><button class="copy-btn" onclick="copyResult('ts-result')">复制</button></div>
   </div>`;
 
   // 颜色转换
@@ -316,7 +316,7 @@ function renderPanels() {
       <button class="btn btn-secondary" onclick="calcHash('SHA-384')">SHA-384</button>
       <button class="btn btn-secondary" onclick="calcHash('SHA-512')">SHA-512</button>
     </div>
-    <div class="result-box" id="hash-result"><button class="copy-btn" onclick="copyResult('hash-result')">复制</button></div>
+    <div class="result-box" id="hash-result"><span class="result-text"></span><button class="copy-btn" onclick="copyResult('hash-result')">复制</button></div>
   </div>`;
 
   // UUID生成
@@ -326,7 +326,7 @@ function renderPanels() {
       <button class="btn btn-primary" onclick="genUUID()">生成1个</button>
       <button class="btn btn-secondary" onclick="genMultiUUID()">生成10个</button>
     </div>
-    <div class="result-box" id="uuid-result"><button class="copy-btn" onclick="copyResult('uuid-result')">复制</button></div>
+    <div class="result-box" id="uuid-result"><span class="result-text"></span><button class="copy-btn" onclick="copyResult('uuid-result')">复制</button></div>
   </div>`;
 
   // 大小写转换
@@ -342,7 +342,7 @@ function renderPanels() {
       <button class="btn btn-secondary" onclick="convertCase('const')">常量</button>
       <button class="btn btn-secondary" onclick="convertCase('title')">标题</button>
     </div>
-    <div class="result-box" id="case-result"><button class="copy-btn" onclick="copyResult('case-result')">复制</button></div>
+    <div class="result-box" id="case-result"><span class="result-text"></span><button class="copy-btn" onclick="copyResult('case-result')">复制</button></div>
   </div>`;
 
   // 文本对比
@@ -361,14 +361,14 @@ function renderPanels() {
     <h2>🔑 JWT解析 <span class="back" onclick="showHome()">← 返回</span></h2>
     <textarea id="jwt-input" placeholder="粘贴JWT Token"></textarea>
     <div class="btn-row"><button class="btn btn-primary" onclick="parseJWT()">解析</button></div>
-    <div class="result-box" id="jwt-result"><button class="copy-btn" onclick="copyResult('jwt-result')">复制</button></div>
+    <div class="result-box" id="jwt-result"><span class="result-text"></span><button class="copy-btn" onclick="copyResult('jwt-result')">复制</button></div>
   </div>`;
 
   // IP查询
   html += `<div class="tool-panel" id="panel-ip">
     <h2>🌐 IP查询 <span class="back" onclick="showHome()">← 返回</span></h2>
     <div class="btn-row"><button class="btn btn-primary" onclick="queryIP()">查询我的IP</button></div>
-    <div class="result-box" id="ip-result"><button class="copy-btn" onclick="copyResult('ip-result')">复制</button></div>
+    <div class="result-box" id="ip-result"><span class="result-text"></span><button class="copy-btn" onclick="copyResult('ip-result')">复制</button></div>
   </div>`;
 
   // UA解析
@@ -390,7 +390,7 @@ function renderPanels() {
   html += `<div class="tool-panel" id="panel-image-base64">
     <h2>🖼️ 图片Base64 <span class="back" onclick="showHome()">← 返回</span></h2>
     <input type="file" id="img-file" accept="image/*" onchange="imgToBase64()">
-    <div class="result-box" id="img-result" style="max-height:200px;overflow:auto"><button class="copy-btn" onclick="copyResult('img-result')">复制</button></div>
+    <div class="result-box" id="img-result" style="max-height:200px;overflow:auto"><span class="result-text"></span><button class="copy-btn" onclick="copyResult('img-result')">复制</button></div>
   </div>`;
 
   // 进制转换
@@ -401,7 +401,7 @@ function renderPanels() {
       <div class="form-group"><label>源进制</label><select id="nb-from"><option value="10">十进制</option><option value="2">二进制</option><option value="8">八进制</option><option value="16">十六进制</option></select></div>
       <button class="btn btn-primary" onclick="convertBase()">转换</button>
     </div>
-    <div class="result-box" id="nb-result"><button class="copy-btn" onclick="copyResult('nb-result')">复制</button></div>
+    <div class="result-box" id="nb-result"><span class="result-text"></span><button class="copy-btn" onclick="copyResult('nb-result')">复制</button></div>
   </div>`;
 
   // CSS渐变
@@ -416,7 +416,7 @@ function renderPanels() {
       </select></div>
     </div>
     <div id="grad-preview" style="width:100%;height:120px;border-radius:8px;background:linear-gradient(to right,#6c5ce7,#a29bfe);margin:12px 0;border:1px solid var(--border)"></div>
-    <div class="result-box" id="grad-result">background: linear-gradient(to right, #6c5ce7, #a29bfe);<button class="copy-btn" onclick="copyResult('grad-result')">复制</button></div>
+    <div class="result-box" id="grad-result"><span class="result-text">background: linear-gradient(to right, #6c5ce7, #a29bfe);</span><button class="copy-btn" onclick="copyResult('grad-result')">复制</button></div>
   </div>`;
 
   // 正则测试
@@ -437,22 +437,36 @@ function renderPanels() {
 
 function copyResult(id) {
   const el = document.getElementById(id);
-  const text = el.textContent.replace('复制', '').trim();
-  copyText(text);
+  const textEl = el.querySelector('.result-text');
+  copyText((textEl ? textEl.textContent : el.textContent.replace('复制', '').trim()));
+}
+
+/** 仅更新结果文本节点，避免 textContent 覆盖整块 DOM 导致「复制」按钮被移除 */
+function setResultBoxText(boxId, text) {
+  const box = document.getElementById(boxId);
+  let span = box.querySelector(':scope > .result-text');
+  if (!span) {
+    span = document.createElement('span');
+    span.className = 'result-text';
+    const btn = box.querySelector('.copy-btn');
+    if (btn) box.insertBefore(span, btn);
+    else box.insertBefore(span, box.firstChild);
+  }
+  span.textContent = text;
 }
 
 // JSON
 function jsonFormat() {
-  try { const r = JSON.stringify(JSON.parse(document.getElementById('json-input').value), null, 2); document.getElementById('json-result').textContent = r; }
-  catch(e) { document.getElementById('json-result').textContent = '❌ 无效JSON: ' + e.message; }
+  try { const r = JSON.stringify(JSON.parse(document.getElementById('json-input').value), null, 2); setResultBoxText('json-result', r); }
+  catch(e) { setResultBoxText('json-result', '❌ 无效JSON: ' + e.message); }
 }
 function jsonMinify() {
-  try { const r = JSON.stringify(JSON.parse(document.getElementById('json-input').value)); document.getElementById('json-result').textContent = r; }
-  catch(e) { document.getElementById('json-result').textContent = '❌ 无效JSON: ' + e.message; }
+  try { const r = JSON.stringify(JSON.parse(document.getElementById('json-input').value)); setResultBoxText('json-result', r); }
+  catch(e) { setResultBoxText('json-result', '❌ 无效JSON: ' + e.message); }
 }
 function jsonValidate() {
-  try { JSON.parse(document.getElementById('json-input').value); document.getElementById('json-result').textContent = '✅ 有效的JSON'; }
-  catch(e) { document.getElementById('json-result').textContent = '❌ 无效JSON: ' + e.message; }
+  try { JSON.parse(document.getElementById('json-input').value); setResultBoxText('json-result', '✅ 有效的JSON'); }
+  catch(e) { setResultBoxText('json-result', '❌ 无效JSON: ' + e.message); }
 }
 function jsonToCSV() {
   try {
@@ -461,8 +475,8 @@ function jsonToCSV() {
     if (!arr.length) throw new Error('空数组');
     const headers = Object.keys(arr[0]);
     const csv = [headers.join(','), ...arr.map(row => headers.map(h => JSON.stringify(row[h] ?? '')).join(','))].join('\n');
-    document.getElementById('json-result').textContent = csv;
-  } catch(e) { document.getElementById('json-result').textContent = '❌ ' + e.message; }
+    setResultBoxText('json-result', csv);
+  } catch(e) { setResultBoxText('json-result', '❌ ' + e.message); }
 }
 
 // 密码
@@ -478,7 +492,7 @@ function genPassword() {
   crypto.getRandomValues(arr);
   const pwd = Array.from(arr, x => chars[x % chars.length]).join('');
   const strength = len >= 16 && [document.getElementById('pwd-upper').checked, document.getElementById('pwd-lower').checked, document.getElementById('pwd-num').checked, document.getElementById('pwd-sym').checked].filter(Boolean).length >= 3 ? '强' : len >= 12 ? '中' : '弱';
-  document.getElementById('pwd-result').textContent = `${pwd}\n\n强度: ${strength} | 长度: ${len}`;
+  setResultBoxText('pwd-result', `${pwd}\n\n强度: ${strength} | 长度: ${len}`);
 }
 function genMultiPasswords() {
   const len = parseInt(document.getElementById('pwd-len').value) || 16;
@@ -493,38 +507,38 @@ function genMultiPasswords() {
     const arr = new Uint32Array(len); crypto.getRandomValues(arr);
     pwds.push(Array.from(arr, x => chars[x % chars.length]).join(''));
   }
-  document.getElementById('pwd-result').textContent = pwds.join('\n');
+  setResultBoxText('pwd-result', pwds.join('\n'));
 }
 
 // Base64
 function b64Encode() {
-  try { document.getElementById('b64-result').textContent = btoa(unescape(encodeURIComponent(document.getElementById('b64-input').value))); }
-  catch(e) { document.getElementById('b64-result').textContent = '❌ ' + e.message; }
+  try { setResultBoxText('b64-result', btoa(unescape(encodeURIComponent(document.getElementById('b64-input').value)))); }
+  catch(e) { setResultBoxText('b64-result', '❌ ' + e.message); }
 }
 function b64Decode() {
-  try { document.getElementById('b64-result').textContent = decodeURIComponent(escape(atob(document.getElementById('b64-input').value))); }
-  catch(e) { document.getElementById('b64-result').textContent = '❌ 无效Base64: ' + e.message; }
+  try { setResultBoxText('b64-result', decodeURIComponent(escape(atob(document.getElementById('b64-input').value)))); }
+  catch(e) { setResultBoxText('b64-result', '❌ 无效Base64: ' + e.message); }
 }
 
 // URL
-function urlEncode() { document.getElementById('url-result').textContent = encodeURIComponent(document.getElementById('url-input').value); }
-function urlDecode() { try { document.getElementById('url-result').textContent = decodeURIComponent(document.getElementById('url-input').value); } catch(e) { document.getElementById('url-result').textContent = '❌ ' + e.message; } }
+function urlEncode() { setResultBoxText('url-result', encodeURIComponent(document.getElementById('url-input').value)); }
+function urlDecode() { try { setResultBoxText('url-result', decodeURIComponent(document.getElementById('url-input').value)); } catch(e) { setResultBoxText('url-result', '❌ ' + e.message); } }
 
 // 时间戳
 function tsToDate() {
   let ts = parseInt(document.getElementById('ts-input').value);
-  if (isNaN(ts)) return document.getElementById('ts-result').textContent = '❌ 请输入有效时间戳';
+  if (isNaN(ts)) { setResultBoxText('ts-result', '❌ 请输入有效时间戳'); return; }
   if (ts > 1e12) ts = ts / 1000; // ms → s
-  document.getElementById('ts-result').textContent = new Date(ts * 1000).toLocaleString('zh-CN', {timeZone:'Asia/Shanghai',hour12:false});
+  setResultBoxText('ts-result', new Date(ts * 1000).toLocaleString('zh-CN', {timeZone:'Asia/Shanghai',hour12:false}));
 }
 function dateToTs() {
   const d = new Date(document.getElementById('ts-date').value);
-  if (isNaN(d)) return document.getElementById('ts-result').textContent = '❌ 请输入有效日期';
-  document.getElementById('ts-result').textContent = `秒: ${Math.floor(d/1000)}\n毫秒: ${d.getTime()}`;
+  if (isNaN(d)) { setResultBoxText('ts-result', '❌ 请输入有效日期'); return; }
+  setResultBoxText('ts-result', `秒: ${Math.floor(d/1000)}\n毫秒: ${d.getTime()}`);
 }
 function currentTs() {
   const now = Date.now();
-  document.getElementById('ts-result').textContent = `秒: ${Math.floor(now/1000)}\n毫秒: ${now}\n日期: ${new Date().toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false})}`;
+  setResultBoxText('ts-result', `秒: ${Math.floor(now/1000)}\n毫秒: ${now}\n日期: ${new Date().toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false})}`);
 }
 
 // 颜色
@@ -589,15 +603,15 @@ async function calcHash(algo) {
   const text = document.getElementById('hash-input').value;
   const buf = await crypto.subtle.digest(algo, new TextEncoder().encode(text));
   const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-  document.getElementById('hash-result').textContent = `${algo}: ${hex}`;
+  setResultBoxText('hash-result', `${algo}: ${hex}`);
 }
 
 // UUID
 function genUUID() {
-  document.getElementById('uuid-result').textContent = crypto.randomUUID();
+  setResultBoxText('uuid-result', crypto.randomUUID());
 }
 function genMultiUUID() {
-  document.getElementById('uuid-result').textContent = Array.from({length:10}, () => crypto.randomUUID()).join('\n');
+  setResultBoxText('uuid-result', Array.from({length:10}, () => crypto.randomUUID()).join('\n'));
 }
 
 // 大小写
@@ -615,7 +629,7 @@ function convertCase(type) {
     case 'title': r = words.map(w => w[0].toUpperCase() + w.slice(1).toLowerCase()).join(' '); break;
     default: r = t;
   }
-  document.getElementById('case-result').textContent = r;
+  setResultBoxText('case-result', r);
 }
 
 // 文本对比
@@ -646,8 +660,8 @@ function parseJWT() {
     let result = `Header:\n${JSON.stringify(header, null, 2)}\n\nPayload:\n${JSON.stringify(payload, null, 2)}`;
     if (payload.exp) result += `\n\n过期时间: ${new Date(payload.exp * 1000).toLocaleString('zh-CN')}`;
     if (payload.iat) result += `\n签发时间: ${new Date(payload.iat * 1000).toLocaleString('zh-CN')}`;
-    document.getElementById('jwt-result').textContent = result;
-  } catch(e) { document.getElementById('jwt-result').textContent = '❌ ' + e.message; }
+    setResultBoxText('jwt-result', result);
+  } catch(e) { setResultBoxText('jwt-result', '❌ ' + e.message); }
 }
 
 // IP
@@ -655,8 +669,8 @@ async function queryIP() {
   try {
     const res = await fetch('https://api.ipify.org?format=json');
     const data = await res.json();
-    document.getElementById('ip-result').textContent = `IP: ${data.ip}\n时间: ${new Date().toLocaleString('zh-CN')}`;
-  } catch(e) { document.getElementById('ip-result').textContent = '❌ 查询失败: ' + e.message; }
+    setResultBoxText('ip-result', `IP: ${data.ip}\n时间: ${new Date().toLocaleString('zh-CN')}`);
+  } catch(e) { setResultBoxText('ip-result', '❌ 查询失败: ' + e.message); }
 }
 
 // UA
@@ -685,7 +699,7 @@ function imgToBase64() {
   const file = document.getElementById('img-file').files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = () => { document.getElementById('img-result').textContent = reader.result; };
+  reader.onload = () => { setResultBoxText('img-result', reader.result); };
   reader.readAsDataURL(file);
 }
 
@@ -696,8 +710,8 @@ function convertBase() {
   try {
     const num = parseInt(input, from);
     if (isNaN(num)) throw new Error('无效输入');
-    document.getElementById('nb-result').textContent = `二进制: ${num.toString(2)}\n八进制: ${num.toString(8)}\n十进制: ${num.toString(10)}\n十六进制: ${num.toString(16).toUpperCase()}`;
-  } catch(e) { document.getElementById('nb-result').textContent = '❌ ' + e.message; }
+    setResultBoxText('nb-result', `二进制: ${num.toString(2)}\n八进制: ${num.toString(8)}\n十进制: ${num.toString(10)}\n十六进制: ${num.toString(16).toUpperCase()}`);
+  } catch(e) { setResultBoxText('nb-result', '❌ ' + e.message); }
 }
 
 // CSS渐变
@@ -707,7 +721,7 @@ function updateGradient() {
   const dir = document.getElementById('grad-dir').value;
   const css = `background: linear-gradient(${dir}, ${c1}, ${c2});`;
   document.getElementById('grad-preview').style.background = `linear-gradient(${dir}, ${c1}, ${c2})`;
-  document.getElementById('grad-result').textContent = css;
+  setResultBoxText('grad-result', css);
 }
 
 // 正则
