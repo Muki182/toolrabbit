@@ -1,0 +1,278 @@
+# Instincts generated from https://github.com/Muki182/toolrabbit
+# Generated: 2026-05-16T11:05:14.772Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: toolrabbit-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/Muki182/toolrabbit
+---
+
+# Toolrabbit Commit Length
+
+## Action
+
+Write moderate-length commit messages (~61 characters)
+
+## Evidence
+
+- Average commit message length: 61 chars
+- Based on 1 commits
+
+---
+id: toolrabbit-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/Muki182/toolrabbit
+---
+
+# Toolrabbit Naming Files
+
+## Action
+
+Use camelCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: camelCase
+
+---
+id: toolrabbit-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/Muki182/toolrabbit
+---
+
+# Toolrabbit Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: toolrabbit-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/Muki182/toolrabbit
+---
+
+# Toolrabbit Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: toolrabbit-instinct-filename-camelcase
+trigger: "When creating a new file in the codebase"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: Muki182/toolrabbit
+---
+
+# Toolrabbit Instinct Filename Camelcase
+
+## Action
+
+Name the file using camelCase convention
+
+## Evidence
+
+- Pattern in namingConventions.files
+
+---
+id: toolrabbit-instinct-function-camelcase
+trigger: "When defining a new function"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: Muki182/toolrabbit
+---
+
+# Toolrabbit Instinct Function Camelcase
+
+## Action
+
+Use camelCase for the function name
+
+## Evidence
+
+- Pattern in namingConventions.functions
+
+---
+id: toolrabbit-instinct-class-pascalcase
+trigger: "When defining a new class"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: Muki182/toolrabbit
+---
+
+# Toolrabbit Instinct Class Pascalcase
+
+## Action
+
+Use PascalCase for the class name
+
+## Evidence
+
+- Pattern in namingConventions.classes
+
+---
+id: toolrabbit-instinct-constant-screaming-snake
+trigger: "When declaring a constant"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: Muki182/toolrabbit
+---
+
+# Toolrabbit Instinct Constant Screaming Snake
+
+## Action
+
+Use SCREAMING_SNAKE_CASE for the constant name
+
+## Evidence
+
+- Pattern in namingConventions.constants
+
+---
+id: toolrabbit-instinct-import-absolute
+trigger: "When importing modules"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: Muki182/toolrabbit
+---
+
+# Toolrabbit Instinct Import Absolute
+
+## Action
+
+Use absolute import paths
+
+## Evidence
+
+- Pattern in importStyle
+
+---
+id: toolrabbit-instinct-export-named
+trigger: "When exporting from a module"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: Muki182/toolrabbit
+---
+
+# Toolrabbit Instinct Export Named
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Pattern in exportStyle
+
+---
+id: toolrabbit-instinct-commit-prefix-security
+trigger: "When making a commit related to security"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: Muki182/toolrabbit
+---
+
+# Toolrabbit Instinct Commit Prefix Security
+
+## Action
+
+Prefix the commit message with 'security:'
+
+## Evidence
+
+- Seen in commit 'security: mitigate DOM XSS in Markdown, diff, and regex views'
+- Pattern in commits.prefixes
+
+---
+id: toolrabbit-instinct-commit-length
+trigger: "When writing a commit message"
+confidence: 0.7
+domain: git
+source: repo-analysis
+source_repo: Muki182/toolrabbit
+---
+
+# Toolrabbit Instinct Commit Length
+
+## Action
+
+Keep the commit message concise, around 60 characters on average
+
+## Evidence
+
+- Pattern in commits.averageLength
+
+---
+id: toolrabbit-instinct-test-location-separate
+trigger: "When adding new tests"
+confidence: 0.9
+domain: testing
+source: repo-analysis
+source_repo: Muki182/toolrabbit
+---
+
+# Toolrabbit Instinct Test Location Separate
+
+## Action
+
+Place test files in the 'tests' folder, separate from source code
+
+## Evidence
+
+- Pattern in architecture.testLocation
+- Pattern in architecture.commonFolders
+
+---
+id: toolrabbit-instinct-github-ci-config
+trigger: "When configuring CI workflows"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: Muki182/toolrabbit
+---
+
+# Toolrabbit Instinct Github Ci Config
+
+## Action
+
+Place workflow configuration files in '.github/workflows/'
+
+## Evidence
+
+- Pattern in architecture.configFiles
+
