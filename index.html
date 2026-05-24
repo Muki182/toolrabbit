@@ -441,6 +441,16 @@ function copyResult(id) {
   copyText(text);
 }
 
+/** 将用户内容插入 innerHTML 前必须转义，否则 Markdown/对比/正则等工具可被构造为 XSS。 */
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 // JSON
 function jsonFormat() {
   try { const r = JSON.stringify(JSON.parse(document.getElementById('json-input').value), null, 2); document.getElementById('json-result').textContent = r; }
@@ -626,10 +636,10 @@ function textDiff() {
   let html = '';
   for (let i = 0; i < maxLen; i++) {
     const la = a[i] ?? '', lb = b[i] ?? '';
-    if (la === lb) { html += `<div style="color:var(--text2)">${la}</div>`; }
+    if (la === lb) { html += `<div style="color:var(--text2)">${escapeHtml(la)}</div>`; }
     else {
-      if (la) html += `<div style="color:var(--danger);background:rgba(255,107,107,0.1);padding:2px 4px;border-radius:3px">- ${la}</div>`;
-      if (lb) html += `<div style="color:var(--success);background:rgba(0,184,148,0.1);padding:2px 4px;border-radius:3px">+ ${lb}</div>`;
+      if (la) html += `<div style="color:var(--danger);background:rgba(255,107,107,0.1);padding:2px 4px;border-radius:3px">- ${escapeHtml(la)}</div>`;
+      if (lb) html += `<div style="color:var(--success);background:rgba(0,184,148,0.1);padding:2px 4px;border-radius:3px">+ ${escapeHtml(lb)}</div>`;
     }
   }
   document.getElementById('diff-result').innerHTML = html;
@@ -667,7 +677,7 @@ function parseUA() {
 
 // Markdown (简单实现)
 function renderMD() {
-  const md = document.getElementById('md-input').value;
+  const md = escapeHtml(document.getElementById('md-input').value);
   let html = md
     .replace(/^### (.+)$/gm, '<h3>$1</h3>')
     .replace(/^## (.+)$/gm, '<h2>$1</h2>')
@@ -720,12 +730,12 @@ function testRegex() {
     const re = new RegExp(pattern, flags);
     const matches = text.match(re);
     if (matches) {
-      document.getElementById('regex-result').innerHTML = `<strong>匹配 ${matches.length} 个:</strong><br>` + matches.map(m => `<span style="background:rgba(108,92,231,0.3);padding:2px 4px;border-radius:3px">${m}</span>`).join(' ');
+      document.getElementById('regex-result').innerHTML = `<strong>匹配 ${matches.length} 个:</strong><br>` + matches.map(m => `<span style="background:rgba(108,92,231,0.3);padding:2px 4px;border-radius:3px">${escapeHtml(m)}</span>`).join(' ');
     } else {
       document.getElementById('regex-result').innerHTML = '<span style="color:var(--text2)">无匹配</span>';
     }
   } catch(e) {
-    document.getElementById('regex-result').innerHTML = `<span style="color:var(--danger)">❌ ${e.message}</span>`;
+    document.getElementById('regex-result').innerHTML = `<span style="color:var(--danger)">❌ ${escapeHtml(e.message)}</span>`;
   }
 }
 
