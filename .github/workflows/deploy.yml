@@ -25,10 +25,13 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v4
+      # 只发布站点根文件，避免把 checkout 中的 .git 等一并打进 Pages 产物造成泄露
+      - name: Prepare site
+        run: mkdir -p _site && cp index.html _site/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: _site
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
